@@ -1,0 +1,61 @@
+import java.util.Scanner;
+public class HemingCode {
+    public static void main(String[] args) {
+        int[] bits = new int[7];
+        int k;
+        String code, S, s1, s2, s3, i1, i2, i3, i4;
+        Scanner in = new Scanner(System.in);
+        code = in.nextLine();
+        if (code.length()  0) {
+            if ( code.length() != 7  (!code.contains(1)) & (!code.contains(0))  code.contains( )) {
+                System.out.println(Введён неверный код);
+            } else {
+                for (k = 0; k  7; k++) {
+                    bits[k] = Integer.parseInt(code.substring(k, k+1));
+                }
+
+                i1 = Integer.toString(bits[2]);
+                i2 = Integer.toString(bits[4]);
+                i3 = Integer.toString(bits[5]);
+                i4 = Integer.toString(bits[6]);
+
+                k = bits[0] ^ bits[2] ^ bits[4] ^ bits[6];
+                s1 = Integer.toString(k);
+                k = bits[1] ^ bits[2] ^ bits[5] ^ bits[6];
+                s2 = Integer.toString(k);
+                k = bits[3] ^ bits[4] ^ bits[5] ^ bits[6];
+                s3 = Integer.toString(k);
+                S = s1+s2+s3;
+
+                switch (S) {
+                    case 000 - System.out.println(i1 + i2 + i3 + i4);
+                    case 100 - System.out.println(i1 + i2 + i3 + i4 + nОшибка в проверочном бите r1);
+                    case 010 - System.out.println(i1 + i2 + i3 + i4 + nОшибка в проверочном бите r2);
+                    case 110 - {
+                        bits[2] = bits[2] ^ 1;
+                        i1 = Integer.toString(bits[2]);
+                        System.out.println(i1 + i2 + i3 + i4 + nОшибка в информационном бите i1);
+                    }
+                    case 001 - System.out.println(i1 + i2 + i3 + i4 + nОшибка в проверочном бите r3);
+                    case 101 - {
+                        bits[4] = bits[4] ^ 1;
+                        i2 = Integer.toString(bits[4]);
+                        System.out.println(i1 + i2 + i3 + i4 + nОшибка в информационном бите i2);
+                    }
+                    case 011 - {
+                        bits[5] = bits[5] ^ 1;
+                        i3 = Integer.toString(bits[5]);
+                        System.out.println(i1 + i2 + i3 + i4 + nОшибка в информационном бите i3);
+                    }
+                    case 111 - {
+                        bits[6] = bits[6] ^ 1;
+                        i4 = Integer.toString(bits[6]);
+                        System.out.println(i1 + i2 + i3 + i4 + nОшибка в информационном бите i4);
+                    }
+                }
+            }
+        } else {
+            System.out.println(Вы не ввели полученный код);
+        }
+    }
+}
