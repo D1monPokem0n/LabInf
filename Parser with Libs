@@ -1,0 +1,12 @@
+import time
+from json2xml import json2xml
+from json2xml.utils import readfromurl, readfromstring, readfromjson
+start_time = time.time()
+for k in range(100):
+ file = open('C:\LabInf4\Shedule.txt','r',encoding='UTF-8')
+ json=''
+ for line in file:
+    json=json+line
+ data = readfromstring(json)
+ print(json2xml.Json2xml(data).to_xml())
+print("--- %s seconds ---" % (time.time() - start_time))
