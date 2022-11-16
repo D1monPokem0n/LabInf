@@ -1,0 +1,22 @@
+import time
+start_time = time.time()
+for k in range(100):
+ def parse_xml(parsed):
+  for i in parsed.keys():
+      if isinstance(parsed[i],dict):
+          print('<'+i+'>')
+          parse_xml(parsed[i])
+          print('</'+i+'>')
+      elif isinstance(parsed[i],list):
+          for k in parsed[i]:
+              print('<'+i+'>')
+              parse_xml(k)
+              print('</'+i+'>')
+      else: print('<'+i+'>'+parsed[i]+'<'+i+'>')
+ file = open('C:\LabInf4\Shedule.txt', 'r', encoding="UTF-8")
+ json_str = ""
+ for line in file:
+    json_str = json_str + line
+ parsed = eval(json_str)
+ parse_xml(parsed)
+print("--- %s seconds ---" % (time.time() - start_time))
