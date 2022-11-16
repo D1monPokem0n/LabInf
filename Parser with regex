@@ -1,0 +1,82 @@
+import time
+import re
+start_time = time.time()
+for k in range(100):
+ def parse_xml(parsed):
+  for i in parsed.keys():
+      if isinstance(parsed[i],dict):
+          print('<'+i+'>')
+          parse_xml(parsed[i])
+          print('</'+i+'>')
+      elif isinstance(parsed[i],list):
+          for k in parsed[i]:
+              print('<'+i+'>')
+              parse_xml(k)
+              print('</'+i+'>')
+      else: print('<'+i+'>'+parsed[i]+'<'+i+'>')
+
+
+ def find_all_tokens(json):
+    tokens = re.findall(r'((?<=\n\t{1})\"[A-Za-z0-9-_]*?\": \"[A-ZА-Яa-zа-я.,-_()\s]*\"(?!\n},)|\".*\": {[\n*A-Z{}()\":\s\[a-zА-Яа-я0-9,-\]]*?}|\".*(?=\": \[)[\n*A-Z{}()\":\s\[a-zА-Яа-я0-9,-\]]*])', json)
+    return tokens
+
+
+ def token_to_normal(token):
+    match1 = re.match(r'\".*(?=\": \[)[\n*A-Z{}()\":\s\[a-zА-Яа-я0-9,-\]]*]',token)
+    match2 = re.match(r'".*": {[\n*A-Z{}()":\s\[a-zА-Яа-я0-9,-\]]*?}',token)
+    match3 = re.match(r'".*": ".*"(?=,)?(?=\n)?',token)
+    if match1:
+        token = match1[0]
+    elif match2:
+        token = match2[0]
+    elif match3:
+        token = match3[0]
+
+
+ def makedict(token):
+    match1 = re.match(r'\".*(?=\": \[)[\n*A-Z{}()\":\s\[a-zА-Яа-я0-9,-\]]*]',token)
+    match2 = re.match(r"\".*\": {[\n*A-Z{}()\":\s\[a-zА-Яа-я0-9,-\]]*?}",token)
+    match3 = re.match(r'".*": ".*"(?=,)?(?=\n)?',token)
+    if match1:
+        key = re.findall(r'(?<=\").*?(?=\": \[)', token)[0]
+        massive = re.findall(r'\[[\n*A-Z{}()\":\s\[a-zА-Яа-я0-9,-\]]*]',token)[0]
+        listik = []
+        dicts = re.findall(r"(?<={)[A-Za-zА-Яа-я.,-_()0-9\s\n},'\"]*(?=})", massive)
+        for pattern in dicts:
+            dicttemp = {}
+            keyvalues = re.findall(r"\".*?\": \".*?\"", pattern)
+            for keyvalue1 in keyvalues:
+                key1 = re.findall(r'(?<=\").*?(?=\":)', keyvalue1)[0]
+                value1 = re.findall(r'(?<=:\s\").*(?=\")', keyvalue1)[0]
+                dicttemp[key1] = value1
+            listik.append(dicttemp)
+        dictionary[key] = listik
+
+
+    elif match2:
+        key = re.findall(r'(?<=").*(?=": {)', token)[0]
+        value = re.findall(r"(?<=: {)[A-Za-zА-Яа-я.,-_()0-9\s\n},'\"]*(?=})", token)[0]
+        dictionary1 = {}
+        values1 = re.findall(r"\".*", value)
+        for token1 in values1:
+            key1 = re.findall(r'(?<=\").*?(?=\":)', token1)[0]
+            value1 = re.findall(r'(?<=:\s\").*(?=\")', token1)[0]
+            dictionary1[key1] = value1
+        dictionary[key] = dictionary1
+
+
+    elif match3:
+        key = re.findall(r'(?<=\").*?(?=\":)', token)[0]
+        value = re.findall(r'(?<=:\s\").*(?=\")', token)[0]
+        dictionary[key] = value
+
+
+ file = open('C:\LabInf4\Shedule.txt', 'r', encoding="UTF-8")
+ json = file.read()
+ tokens = find_all_tokens(json)
+ dictionary = {}
+ for token in tokens:
+    token_to_normal(token)
+    makedict(token)
+ parse_xml(dictionary)
+print("--- %s seconds ---" % (time.time() - start_time))
