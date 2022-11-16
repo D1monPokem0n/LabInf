@@ -1,0 +1,32 @@
+def parse_csv(parsed):
+    for i in parsed.keys():
+        key = i
+    arrmain = []
+    arrvalues = []
+    k = 0
+    n = 0
+    for i in parsed[key]:
+        k = 0
+        n = n+1
+        for j in i:
+            arrmain.append(j)
+            arrvalues.append(i[j])
+            k=k+1
+    mainstring = ''
+    valuesstring = ''
+    for i in range(k):
+        mainstring = mainstring + arrmain[i] + ','
+    mainstring = mainstring[:len(mainstring)-1]
+    print(mainstring)
+    for i in range(n):
+        valuesstring = ''
+        for j in range(k):
+            valuesstring = valuesstring + arrvalues[i*k+j]+","
+        valuesstring = valuesstring[:len(valuesstring)-1]
+        print(valuesstring)
+file = open('C:\LabInf4\Shedule for CSV.txt', 'r', encoding="UTF-8")
+json_str = ""
+for line in file:
+    json_str = json_str + line
+parsed = eval(json_str)
+parse_csv(parsed)
